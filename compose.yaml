@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - 'POSTGRES_DB=secure_password'
+      - 'POSTGRES_USER=secure-password'
+      - 'POSTGRES_PASSWORD=secure-password'
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    networks:
+      - secure-password-network
+
+  backend:
+    build: ./demo
+    environment:
+      SPRING_DATASOURCE_POSTGRES_USERNAME: secure-password
+      SPRING_DATASOURCE_POSTGRES_PASSWORD: secure-password
+      SPRING_DATASOURCE_POSTGRES_URL: jdbc:postgresql://postgres:5432/secure_password
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    networks:
+      - secure-password-network
+
+  frontend:
+    build: ./securepassword
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+    networks:
+      - secure-password-network
+
+volumes:
+  postgres_data:
+
+networks:
+  secure-password-network:
+    driver: bridge
