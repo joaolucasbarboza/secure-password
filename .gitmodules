@@ -1,8 +1,8 @@
 [submodule "demo"]
 	path = demo
-	url = git@github.com:joaolucasbarboza/secure-password-backend.git
+	url = https://github.com/joaolucasbarboza/secure-password-backend.git
 	branch = main
 [submodule "securepassword"]
 	path = securepassword
-	url = git@github.com:joaolucasbarboza/secure-password-frontend.git
+	url = https://github.com/joaolucasbarboza/secure-password-frontend.git
 	branch = main
